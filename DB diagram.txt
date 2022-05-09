@@ -1,0 +1,50 @@
+Table users as U {
+  id int [pk, increment] // auto-increment
+      Imie string
+    Nazwisko string
+  Masz_id int
+  }
+  Table DEV {
+    id int [pk, increment]
+   zasobnik_id int
+    
+  }
+  
+  Table wydane_leki {
+    id int [pk, increment]
+    data datetime
+    Maszyna_id int
+    pacjent_id int
+    czy_wydano bool
+    kto_przepisal int
+    furtka_od datetime
+    furtka_do datetime
+    nazwa_leku string
+    ilosc int
+
+  }
+
+Table zasobnik {
+  id int [pk, increment]
+  nazwa_leku string
+  ilosc int
+  
+}
+
+
+Table PACJENT {
+  id int [pk, increment]
+  Imie string
+  Nazwisko string
+  Pesel int
+  
+  
+
+}
+
+
+Ref: U.id < wydane_leki.kto_przepisal
+Ref:DEV.id < wydane_leki.Maszyna_id
+Ref: "PACJENT"."id" < "wydane_leki"."pacjent_id"
+
+Ref: "zasobnik"."id" < "DEV"."zasobnik_id"
