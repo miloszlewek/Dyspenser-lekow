@@ -1,0 +1,58 @@
+CREATE TABLE `users` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `imie` varchar(255),
+  `nazwisko` varchar(255),
+  `masz_id` int
+);
+
+CREATE TABLE DEV (
+  id int PRIMARY KEY AUTO_INCREMENT,
+  zasobnik_id int
+);
+
+CREATE TABLE wydane_leki (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `data` datetime,
+  `Maszyna_id` int,
+  `pacjent_id` int,
+  `czy_wydano` bool,
+  `kto_przepisal` int,
+  `furtka_od` datetime,
+  `furtka_do` datetime,
+  `nazwa_leku`  varchar(255),
+  `ilosc` int
+);
+
+CREATE TABLE zasobnik (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `nazwa_leku`  varchar(255),
+  `ilosc` int
+);
+
+CREATE TABLE PACJENT (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `Imie`  varchar(255),
+  `Nazwisko`  varchar(255),
+  `Pesel` int
+);
+
+ALTER TABLE wydane_leki ADD FOREIGN KEY (kto_przepisal) REFERENCES users (id);
+
+ALTER TABLE wydane_leki ADD FOREIGN KEY (Maszyna_id) REFERENCES DEV (id);
+
+ALTER TABLE wydane_leki ADD FOREIGN KEY (pacjent_id) REFERENCES PACJENT (id);
+
+ALTER TABLE DEV ADD FOREIGN KEY (zasobnik_id) REFERENCES zasobnik (id);
+
+show tables;
+
+insert into users value (1, "Paweł", "Jezuita", 1);
+
+insert into PACJENT value (1, "Jan", "Wiadomojakienazwisko", 83111502318);
+
+insert into zasobnik value (1, "Witaminy", 25);
+
+insert into DEV value (1, 1);
+
+insert into wydane_leki value (1, now(),  1, 1, 1, 1, "2022-05-15 08:30:00", "2022-05-15 08:45:00", "Witaminy", 3);
+
