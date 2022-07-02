@@ -1,0 +1,81 @@
+#include <Stepper.h>
+#include "BluetoothSerial.h"
+
+
+#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
+#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
+#endif
+
+BluetoothSerial SerialBT;
+
+const int stepsPerRevolution = 97.5;  // change this to fit the number of steps per revolution
+
+String message = "";
+char incomingChar;
+
+// ULN2003 Motor Driver Pins
+#define IN1 19
+#define IN2 18
+#define IN3 5
+#define IN4 17
+
+#define IN5 15
+#define IN6 2
+#define IN7 0
+#define IN8 4
+
+#define IN9 34
+#define IN10 35
+#define IN11 32
+#define IN12 33
+
+#define IN13 26
+#define IN14 27
+#define IN15 14
+#define IN16 12
+// initialize the stepper library
+Stepper silnik1(stepsPerRevolution, IN1, IN3, IN2, IN4);
+Stepper silnik2(stepsPerRevolution, IN5, IN6, IN7, IN8);
+Stepper silnik3(stepsPerRevolution, IN9, IN10, IN11, IN12);
+Stepper silnik4(stepsPerRevolution, IN13, IN14, IN15, IN16);
+
+void setup() {
+
+  Serial.begin(115200);
+  SerialBT.begin("ESP32test"); //Bluetooth device name
+  Serial.println("The device started, now you can pair it with bluetooth!");
+
+  silnik1.setSpeed(100);
+  silnik2.setSpeed(100);
+  silnik3.setSpeed(100);
+  silnik4.setSpeed(100);
+}
+
+void loop() {
+  if (SerialBT.available()){
+    char incomingChar = SerialBT.read();
+    if (incomingChar != '\n'){
+      message += String(incomingChar);
+    }
+    else{
+      message = "";
+    }
+    Serial.write(incomingChar);  
+  }
+    
+    if (message =="M1"){
+    silnik1.step(stepsPerRevolution);
+    message = "";
+  } else if (message =="M2"){
+    silnik2.step(stepsPerRevolution);
+    message = "";
+  }  else if (message =="M3"){
+   silnik3.step(stepsPerRevolution);
+   message = "";
+  } else if (message =="M4"){
+    silnik4.step(stepsPerRevolution);
+    message = "";
+  }
+  delay(20);
+  
+}
