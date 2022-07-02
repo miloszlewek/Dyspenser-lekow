@@ -48,3 +48,4 @@ Ref:DEV.id < wydane_leki.Maszyna_id
 Ref: "PACJENT"."id" < "wydane_leki"."pacjent_id"
 
 Ref: "zasobnik"."id" < "DEV"."zasobnik_id"
+
